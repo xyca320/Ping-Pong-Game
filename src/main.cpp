@@ -12,7 +12,7 @@ int main()
     constexpr int screenHeight = 1440;
 
     InitWindow(screenWidth, screenHeight, "Ping Pong Game");
-    SetTargetFPS(144);
+    SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
     InitAudioDevice();
     
     Ball ball;
@@ -22,11 +22,38 @@ int main()
     Font ScoreTextFont = LoadFont("assets/Arcade.ttf");
 
     Sound Goal = LoadSound("assets/roblox-congrats.mp3"), Win = LoadSound("assets/aplausos_2.mp3");
+    Music BGM = LoadMusicStream("assets/Color 4.mp3");
 
     string P_OneAbilityText = "[D] - P1 ABILITY", P_TwoAbilityText = "[LEFT] - P1 ABILITY";
+
+    int CurrentBGMTrack = 1;
+
+    PlayMusicStream(BGM);
     
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(BGM);
+
+        if (GetMusicTimePlayed(BGM) >= GetMusicTimeLength(BGM)) {
+            UnloadMusicStream(BGM); 
+
+            if (CurrentBGMTrack == 1) {
+                CurrentBGMTrack = 2;
+                BGM = LoadMusicStream("assets/Color 2.mp3");
+            } else if (CurrentBGMTrack == 2) {
+                CurrentBGMTrack = 3;
+                BGM = LoadMusicStream("assets/Color 3.mp3");
+            } else if (CurrentBGMTrack == 3) {
+                CurrentBGMTrack = 4;
+                BGM = LoadMusicStream("assets/Color 4.mp3");
+            } else {
+                CurrentBGMTrack = 1;
+                BGM = LoadMusicStream("assets/Color 1.mp3");
+            }
+
+            PlayMusicStream(BGM);
+        }
+
         if (ball.WLog() == "P1") {
             PlaySound(Goal);
             Scores.IncreaseCounter(1);
@@ -35,31 +62,6 @@ int main()
             PlaySound(Goal);
             Scores.IncreaseCounter(2);
             ball.Reset();
-        }
-
-        if (Scores.GetScore(1) >= 5) {
-            PlaySound(Win);
-            Scores.ResetCounter();
-            BeginDrawing();
-                const char* WinText = "P1 is the winner winner chicken dinner!!!";
-                Vector2 TextDimensions = MeasureTextEx(ScoreTextFont, WinText, 50, 2);
-
-                DrawTextEx(ScoreTextFont, WinText, {screenWidth / 2 - TextDimensions.x / 2, screenHeight / 2 - TextDimensions.y / 2}, 50, 2, WHITE);
-            EndDrawing();
-
-            sleep(5);
-        } else if (Scores.GetScore(2) >= 5) {
-            sleep(2);
-            PlaySound(Win);
-            Scores.ResetCounter();
-            BeginDrawing();
-                const char* WinText = "P2 is the winner winner chicken dinner!!!";
-                Vector2 TextDimensions = MeasureTextEx(ScoreTextFont, WinText, 50, 2);
-
-                DrawTextEx(ScoreTextFont, WinText, {screenWidth / 2 - TextDimensions.x / 2, screenHeight / 2 - TextDimensions.y / 2}, 50, 2, WHITE);
-            EndDrawing();
-
-            sleep(5);
         }
 
         if (IsKeyDown(KEY_D)) {
@@ -103,6 +105,8 @@ int main()
     CloseAudioDevice();
     UnloadFont(ScoreTextFont);
     UnloadSound(Goal);
+    UnloadSound(Win);
+    UnloadMusicStream(BGM);
     
     CloseWindow();
 }
