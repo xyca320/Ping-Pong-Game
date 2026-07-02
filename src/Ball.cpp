@@ -129,9 +129,9 @@ void Ball::ActivateAbility(int PlrNum)
 float Ball::GetCooldownTimer(int PlrNum) 
 {
     if (PlrNum == 1) {
-        return roundf(OneCoolDown * 10.0f) / 10.0f;
+        return roundf(OneCoolDown);
     } else {
-        return roundf(TwoCoolDown * 10.0f) / 10.0f;
+        return roundf(TwoCoolDown);
     }
 }
 

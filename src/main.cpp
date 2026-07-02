@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <unistd.h>
 #include "Ball.hpp"
 #include "Paddle.hpp"
 #include "ScoreCount.hpp"
@@ -20,7 +21,7 @@ int main()
 
     Font ScoreTextFont = LoadFont("assets/Arcade.ttf");
 
-    Sound Goal = LoadSound("assets/roblox-congrats.mp3");
+    Sound Goal = LoadSound("assets/roblox-congrats.mp3"), Win = LoadSound("assets/aplausos_2.mp3");
 
     string P_OneAbilityText = "[D] - P1 ABILITY", P_TwoAbilityText = "[LEFT] - P1 ABILITY";
     
@@ -34,6 +35,31 @@ int main()
             PlaySound(Goal);
             Scores.IncreaseCounter(2);
             ball.Reset();
+        }
+
+        if (Scores.GetScore(1) >= 5) {
+            PlaySound(Win);
+            Scores.ResetCounter();
+            BeginDrawing();
+                const char* WinText = "P1 is the winner winner chicken dinner!!!";
+                Vector2 TextDimensions = MeasureTextEx(ScoreTextFont, WinText, 50, 2);
+
+                DrawTextEx(ScoreTextFont, WinText, {screenWidth / 2 - TextDimensions.x / 2, screenHeight / 2 - TextDimensions.y / 2}, 50, 2, WHITE);
+            EndDrawing();
+
+            sleep(5);
+        } else if (Scores.GetScore(2) >= 5) {
+            sleep(2);
+            PlaySound(Win);
+            Scores.ResetCounter();
+            BeginDrawing();
+                const char* WinText = "P2 is the winner winner chicken dinner!!!";
+                Vector2 TextDimensions = MeasureTextEx(ScoreTextFont, WinText, 50, 2);
+
+                DrawTextEx(ScoreTextFont, WinText, {screenWidth / 2 - TextDimensions.x / 2, screenHeight / 2 - TextDimensions.y / 2}, 50, 2, WHITE);
+            EndDrawing();
+
+            sleep(5);
         }
 
         if (IsKeyDown(KEY_D)) {

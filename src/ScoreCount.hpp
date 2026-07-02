@@ -13,6 +13,12 @@ class score
         }
     }
 
+    void ResetCounter() 
+    {
+        P_OneScore = 0;
+        P_TwoScore = 0;
+    }
+
     int GetScore(int PlrNum) 
     {
         if (PlrNum == 1) {
