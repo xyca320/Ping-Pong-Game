@@ -1,4 +1,4 @@
-# Replica of the Legendary Ping-pong Game by Eason :)
+# Replica of the Legendary Pong Game by Eason :)
 
 ...with Chill Musics and Smashing !
 
