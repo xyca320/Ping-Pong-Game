@@ -22,13 +22,14 @@ int main()
     Font ScoreTextFont = LoadFont("assets/Arcade.ttf");
 
     Sound Goal = LoadSound("assets/roblox-congrats.mp3"), Win = LoadSound("assets/aplausos_2.mp3");
-    Music BGM = LoadMusicStream("assets/Color 4.mp3");
+    Music BGM = LoadMusicStream("assets/Color 1.mp3");
+
+    BGM.looping = false;
+    PlayMusicStream(BGM);
 
     string P_OneAbilityText = "[D] - P1 ABILITY", P_TwoAbilityText = "[LEFT] - P1 ABILITY";
 
     int CurrentBGMTrack = 1;
-
-    PlayMusicStream(BGM);
     
     while (!WindowShouldClose())
     {
@@ -51,6 +52,7 @@ int main()
                 BGM = LoadMusicStream("assets/Color 1.mp3");
             }
 
+            BGM.looping = false;
             PlayMusicStream(BGM);
         }
 

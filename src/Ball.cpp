@@ -13,6 +13,7 @@ Ball::Ball()
     Pop = LoadSound("assets/Pop.wav");
     Hit = LoadSound("assets/Paddle Hit.mp3");
     Smash = LoadSound("assets/Smash.mp3");
+    Whistle = LoadSound("assets/Whistle.mp3");
 }
 
 Ball::~Ball()
@@ -20,6 +21,7 @@ Ball::~Ball()
     UnloadSound(Pop);
     UnloadSound(Hit);
     UnloadSound(Smash);
+    UnloadSound(Whistle);
 }
 
 void Ball::Update(const Paddle& Paddles)
@@ -29,8 +31,12 @@ void Ball::Update(const Paddle& Paddles)
     if (OneCoolDown > 0.0f) OneCoolDown -= dt;
     if (TwoCoolDown > 0.0f) TwoCoolDown -= dt;
 
-    if (CntDown > 0) {
+    if (CntDown > 0.0f) {
         CntDown -= dt;
+
+        if (CntDown <= 0.0f)
+            PlaySound(Whistle);
+
         return;
     }
 
@@ -104,8 +110,19 @@ void Ball::Reset()
 {
     x = GetScreenWidth() / 2.0f;
     y = GetScreenHeight() / 2.0f;
-    speedX = 500.0f;
-    speedY = 500.0f;
+    int RandomSpeed = GetRandomValue(350, 700), Direction = GetRandomValue(1, 3);
+    speedX = (float)RandomSpeed;
+    speedY = (float)RandomSpeed;
+
+    if (Direction == 1) {
+        speedX *= -1;
+    } else if (Direction == 2) {
+        speedY *= -1;
+    } else if (Direction == 3) {
+        speedX *= -1;
+        speedY *= -1;
+    }
+    
     CntDown = 3.0f;
     
     IsOneSmashing = false;

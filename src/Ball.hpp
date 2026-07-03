@@ -26,5 +26,5 @@ private:
 
     bool IsOneSmashing = false, IsTwoSmashing = false, IsOneBeingCaught = false, IsTwoBeingCaught = false;
 
-    Sound Pop, Hit, Smash;
+    Sound Pop, Hit, Smash, Whistle;
 };
